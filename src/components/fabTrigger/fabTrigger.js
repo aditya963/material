@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('material.components.fabTrigger', [ 'material.core' ])
+    .module('material.components.fabTrigger', ['material.core'])
     .directive('mdFabTrigger', MdFabTriggerDirective);
 
   /**
@@ -27,8 +27,24 @@
       require: ['^?mdFabSpeedDial', '^?mdFabToolbar'],
 
       link: function(scope, element, attributes, controllers) {
+        var parent, controller;
+
+        // Add basic aria attributes
+        element.attr('aria-haspopup', true);
+
+        // Grab the relevant parent
+        parent = element.parent('md-fab-speed-dial') || element.parent('md-fab-toolbar');
+
+        if (parent) {
+          // Watch the isolate scope for changes to isOpen
+          // TODO: Use events and/or fix this when we combine all of this into a single component
+          parent.isolateScope().$watch('vm.isOpen', function(isOpen) {
+            element.attr('aria-expanded', isOpen);
+          });
+        }
+
         // Grab whichever parent controller is used
-        var controller = controllers[0] || controllers[1];
+        controller = controllers[0] || controllers[1];
 
         if (controller) {
           angular.forEach(element.children(), function(child) {
