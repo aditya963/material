@@ -556,9 +556,10 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
 
   this.startIndex = this.newStartIndex;
   this.endIndex = this.newEndIndex;
-  if(this.items){
-    this.container.$scope.$last=this.items.length=== this.endIndex;
-  }
+  this.$scope.$emit('virtualRepeatUpdated', {
+      endIndex: this.endIndex,
+      startIndex: this.startIndex
+  });
 };
 
 
